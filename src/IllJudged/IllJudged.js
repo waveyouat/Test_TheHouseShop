@@ -1,5 +1,5 @@
 import React from "react";
-function illJudged() {
-  return <li>IllJudged place</li>;
+function illJudged(props) {
+  return <li>IllJudged place {props.losers}</li>;
 }
 export default illJudged;

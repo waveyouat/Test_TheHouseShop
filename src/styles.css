@@ -12,3 +12,13 @@
   width: 50%;
   text-align: center;
 }
+.results .suggested {
+  background: green;
+  margin-bottom: 2em;
+  padding: 2em;
+}
+
+.results .avoid {
+  background: red;
+  padding: 2em;
+}

@@ -1,5 +1,6 @@
 import React from "react";
-function suggested() {
-  return <li>Suggested place</li>;
+
+function suggested(props) {
+  return <li>Top Scorer: {props.winners}</li>;
 }
 export default suggested;

@@ -6,6 +6,7 @@ import Coming from "./Coming/Coming";
 import Button from "./Button/Button";
 import Suggested from "./Suggested/Suggested";
 import IllJudged from "./IllJudged/IllJudged";
+import Comment from "./Comment/Comment";
 
 import "./styles.css";
 
@@ -111,7 +112,12 @@ class App extends Component {
     for (let i = 0; i < statoVenues.length; i++) {
       //EVERY VENUE TO BE CONSIDERED IN THE LEADERBORD INDIVIDUALLY
 
-      var oggettoResto = { ...statoVenues[i], score: 0, comments: [] };
+      var oggettoResto = {
+        ...statoVenues[i],
+        score: 0,
+        comments: [],
+        onDrinks: []
+      };
       //OBJECT WILL STORE VENUE SCORE DATA AND COMMENTS
 
       let cibi = statoVenues[i].food;
@@ -125,7 +131,7 @@ class App extends Component {
           voglionoBere.map(drinkPreferito => {
             if (restoDrink === drinkPreferito) {
               oggettoResto.score += 1;
-              console.log(
+              oggettoResto.onDrinks.push(
                 statoPeople[g].name +
                   " can have " +
                   drinkPreferito +
@@ -157,7 +163,11 @@ class App extends Component {
       finalRestos.push(oggettoResto);
     }
     console.log(finalRestos);
-    this.setState({ scoreBoard: finalRestos });
+    this.setState({
+      scoreBoard: finalRestos.sort((a, b) =>
+        a.score > b.score ? 1 : b.score > a.score ? -1 : 0
+      )
+    });
 
     let show = this.state.displayResults;
     this.setState({ displayResults: !show });
@@ -201,18 +211,48 @@ class App extends Component {
           />
           {this.state.displayResults ? (
             <div className="results">
-              <h4>Places to go:</h4>
-              <ul>
-                <Suggested />
-                <Suggested />
+              <ul className="suggested">
+                <Suggested
+                  winners={
+                    this.state.scoreBoard[this.state.scoreBoard.length - 1].name
+                  }
+                />
+                {this.state.scoreBoard[this.state.scoreBoard.length - 1]
+                  .comments[0] ? (
+                  <div>
+                    <ol>
+                      {this.state.scoreBoard[
+                        this.state.scoreBoard.length - 1
+                      ].onDrinks.map(comment => (
+                        <Comment comment={comment} />
+                      ))}
+                    </ol>
+                    <h4>However:</h4>
+                    <ol>
+                      {this.state.scoreBoard[
+                        this.state.scoreBoard.length - 1
+                      ].comments.map(comment => (
+                        <Comment comment={comment} />
+                      ))}
+                    </ol>
+                  </div>
+                ) : null}
               </ul>
-              <h4>Places to avoid:</h4>
-              <ul>
-                <IllJudged />
-              </ul>
-              <ul>
-                <li>Reason 1</li>
-                <li>Reason 2</li>
+              <h5>IllJudged Places</h5>
+              <ul className="avoid">
+                <IllJudged losers={this.state.scoreBoard[0].name} />
+                {this.state.scoreBoard[0].comments[0] ? (
+                  <div>
+                    <h4>Because:</h4>
+                    <ol>
+                      {this.state.scoreBoard[0].comments.map(comment => (
+                        <Comment comment={comment} />
+                      ))}
+                    </ol>
+                  </div>
+                ) : (
+                  <p>Not many options</p>
+                )}
               </ul>
             </div>
           ) : null}
