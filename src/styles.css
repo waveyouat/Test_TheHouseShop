@@ -1,6 +1,8 @@
 .App {
   font-family: sans-serif;
   text-align: center;
+  max-width: 740px;
+  margin: 0 auto;
 }
 .side-by-side {
   display: flex;
