@@ -211,6 +211,7 @@ class App extends Component {
           />
           {this.state.displayResults ? (
             <div className="results">
+              <h4>Top Scorer (most food options, most fav drink matches):</h4>
               <ul className="suggested">
                 <Suggested
                   winners={
@@ -238,6 +239,22 @@ class App extends Component {
                   </div>
                 ) : null}
               </ul>
+              <h4>Safer to go (Can order anything):</h4>
+              <ul className="suggested">
+                {this.state.scoreBoard
+                  .reverse()
+                  .map(place => {
+                    if (place.comments.length === 0) {
+                      return <Suggested winners={place.name} />;
+                    }
+                  })
+                  .splice(
+                    1,
+                    this.state.scoreBoard.length - 1,
+                    "Can order anything"
+                  )}
+              </ul>
+
               <h5>IllJudged Places</h5>
               <ul className="avoid">
                 <IllJudged losers={this.state.scoreBoard[0].name} />
